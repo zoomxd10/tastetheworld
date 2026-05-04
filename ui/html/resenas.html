@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Reseñas de puestos de street food. Busca por ciudad y descubre platos, precios y recomendaciones de la comunidad.">
+  <meta name="author" content="TastetheWorld">
+  <title>Reseñas — TastetheWorld</title>
+  <link rel="stylesheet" href="/static/css/main.css">
+</head>
+<body>
+
+  <header class="cabecera">
+    <div class="cabecera__inner">
+
+      <a href="/" class="cabecera__logo">
+        Taste<span>the</span>World
+      </a>
+
+      <nav aria-label="Navegación principal">
+        <ul class="nav__lista">
+          <li><a href="/" class="nav__enlace">Inicio</a></li>
+          <li><a href="/ranking" class="nav__enlace">Ranking</a></li>
+          <li><a href="/resenas" class="nav__enlace nav__enlace--activo">Reseñas</a></li>
+          <li><a href="/registro" class="nav__enlace nav__enlace--inactivo">Registro</a></li>
+        </ul>
+      </nav>
+
+    </div>
+  </header>
+
+  <main>
+    <section class="resenas">
+      <div class="resenas__inner">
+
+        <h1 class="resenas__titulo">Reseñas de Street Food</h1>
+
+        <div class="resenas__buscador">
+          <search>
+            <label for="buscador-ciudad" class="buscador__etiqueta">
+              Buscar por ciudad o nombre del puesto
+            </label>
+            <div class="buscador">
+              <input
+                class="buscador__input"
+                type="search"
+                id="buscador-ciudad"
+                name="buscar"
+                placeholder="Ej: Bangkok, tacos, ramen…">
+            </div>
+          </search>
+        </div>
+
+        <p class="resenas__nota-buscador">Puede buscarse por ciudad</p>
+
+        <article class="ficha">
+
+          <header class="ficha__cabecera">
+            <hgroup>
+              <h2 class="ficha__nombre">Pad Thai Wok Rambuttri</h2>
+              <p class="ficha__ciudad">Bangkok, Tailandia</p>
+            </hgroup>
+            <p class="ficha__valoracion" aria-label="Valoración 4.8 sobre 5">
+              ★★★★★ 4.8 / 5
+            </p>
+          </header>
+
+          <div class="ficha__cuerpo">
+
+            <div>
+              <h3 class="ficha__col-titulo">Platos</h3>
+              <ul class="ficha__menu">
+                <li class="ficha__plato">
+                  <span class="ficha__nombre-plato">Pad Thai clásico</span>
+                  <span class="ficha__precio">60 ฿</span>
+                </li>
+                <li class="ficha__plato">
+                  <span class="ficha__nombre-plato">Pad Thai con gambas</span>
+                  <span class="ficha__precio">80 ฿</span>
+                </li>
+                <li class="ficha__plato">
+                  <span class="ficha__nombre-plato">Pad See Ew</span>
+                  <span class="ficha__precio">65 ฿</span>
+                </li>
+                <li class="ficha__plato">
+                  <span class="ficha__nombre-plato">Tom Yum sopa</span>
+                  <span class="ficha__precio">70 ฿</span>
+                </li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 class="ficha__col-titulo">Precio medio</h3>
+              <ul class="ficha__menu">
+                <li class="ficha__plato">
+                  <span class="ficha__nombre-plato">Por persona</span>
+                  <span class="ficha__precio">~200 ฿</span>
+                </li>
+                <li class="ficha__plato">
+                  <span class="ficha__nombre-plato">Con bebida</span>
+                  <span class="ficha__precio">~250 ฿</span>
+                </li>
+                <li class="ficha__plato">
+                  <span class="ficha__nombre-plato">Rango</span>
+                  <span class="ficha__precio">60–120 ฿</span>
+                </li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 class="ficha__col-titulo">Recomendaciones del cliente</h3>
+              <p class="ficha__recomendaciones">
+                Pide el Pad Thai con gambas y pídelo bien picante.
+                Llega antes de las 18:00 porque la cola puede ser larga.
+                El cocinero lleva más de 30 años con el wok.
+                Añade lima fresca y cacahuetes al servir.
+              </p>
+            </div>
+
+          </div>
+
+        </article>
+
+        <article class="ficha">
+
+          <header class="ficha__cabecera">
+            <hgroup>
+              <h2 class="ficha__nombre">Tacos El Callejón</h2>
+              <p class="ficha__ciudad">Ciudad de México, México</p>
+            </hgroup>
+            <p class="ficha__valoracion" aria-label="Valoración 4.6 sobre 5">
+              ★★★★☆ 4.6 / 5
+            </p>
+          </header>
+
+          <div class="ficha__cuerpo">
+
+            <div>
+              <h3 class="ficha__col-titulo">Platos</h3>
+              <ul class="ficha__menu">
+                <li class="ficha__plato">
+                  <span class="ficha__nombre-plato">Taco al pastor</span>
+                  <span class="ficha__precio">20 MXN</span>
+                </li>
+                <li class="ficha__plato">
+                  <span class="ficha__nombre-plato">Taco de carnitas</span>
+                  <span class="ficha__precio">22 MXN</span>
+                </li>
+                <li class="ficha__plato">
+                  <span class="ficha__nombre-plato">Quesadilla de flor</span>
+                  <span class="ficha__precio">35 MXN</span>
+                </li>
+                <li class="ficha__plato">
+                  <span class="ficha__nombre-plato">Agua de horchata</span>
+                  <span class="ficha__precio">15 MXN</span>
+                </li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 class="ficha__col-titulo">Precio medio</h3>
+              <ul class="ficha__menu">
+                <li class="ficha__plato">
+                  <span class="ficha__nombre-plato">Por persona</span>
+                  <span class="ficha__precio">~80 MXN</span>
+                </li>
+                <li class="ficha__plato">
+                  <span class="ficha__nombre-plato">Con bebida</span>
+                  <span class="ficha__precio">~100 MXN</span>
+                </li>
+                <li class="ficha__plato">
+                  <span class="ficha__nombre-plato">Rango</span>
+                  <span class="ficha__precio">20–50 MXN</span>
+                </li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 class="ficha__col-titulo">Recomendaciones del cliente</h3>
+              <p class="ficha__recomendaciones">
+                Los tacos al pastor son legendarios: pide el trompo.
+                Usa salsa verde y cebollita para el sabor auténtico.
+                Abiertos solo de noche, de 20:00 a 2:00.
+                La tortilla es de maíz azul.
+              </p>
+            </div>
+
+          </div>
+
+        </article>
+
+      </div>
+    </section>
+  </main>
+
+  <footer class="pie">
+    <div class="pie__inner">
+      <ul class="pie__nav">
+        <li><a href="/" class="pie__enlace">Inicio</a></li>
+        <li><a href="/ranking" class="pie__enlace">Ranking</a></li>
+        <li><a href="/resenas" class="pie__enlace">Reseñas</a></li>
+        <li><a href="/registro" class="pie__enlace">Registro</a></li>
+      </ul>
+      <p class="pie__texto">
+        <small>© <time datetime="2026">2026</time> TastetheWorld. Todos los derechos reservados.</small>
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    // Esperamos a que la página HTML cargue por completo
+    document.addEventListener('DOMContentLoaded', function() {
+      // Atrapamos el campo de texto del buscador y todas las tarjetas de reseñas
+      const inputBuscador = document.getElementById('buscador-ciudad');
+      const fichas = document.querySelectorAll('.ficha');
+
+      // Escuchamos cada vez que escribes o borras una letra en el buscador
+      inputBuscador.addEventListener('input', function(evento) {
+        // Pasamos lo que escribes a minúsculas para que sea más fácil comparar
+        const textoEscrito = evento.target.value.toLowerCase(); 
+
+        // Revisamos cada ficha una por una
+        fichas.forEach(function(ficha) {
+          // Extraemos el nombre del puesto y la ciudad, también en minúsculas
+          const nombre = ficha.querySelector('.ficha__nombre').textContent.toLowerCase();
+          const ciudad = ficha.querySelector('.ficha__ciudad').textContent.toLowerCase();
+
+          // Si lo que escribiste coincide con parte del nombre o la ciudad, se muestra. Si no, se oculta.
+          if (nombre.includes(textoEscrito) || ciudad.includes(textoEscrito)) {
+            ficha.style.display = ''; // Deja la ficha visible
+          } else {
+            ficha.style.display = 'none'; // Oculta la ficha
+          }
+        });
+      });
+    });
+  </script>
+
+</body>
+</html>

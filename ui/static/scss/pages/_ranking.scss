@@ -1,0 +1,137 @@
+// _ranking.scss — Estilos específicos de la página de ranking
+
+@use '../abstracts/variables' as v;
+@use '../abstracts/mixins' as m;
+
+.ranking {
+  padding-block: v.$espacio-xl;
+
+  &__inner {
+    @include m.contenedor;
+  }
+
+  &__titulo {
+    font-size: v.$fs-grande;
+    margin-bottom: v.$espacio-sm;
+  }
+
+  &__subtitulo {
+    font-size: v.$fs-pequena;
+    color: v.$color-gris;
+    margin-bottom: v.$espacio-lg;
+  }
+
+  &__columnas {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: v.$espacio-xl;
+
+    @include m.escritorio {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  &__subtitulo-panel {
+    font-size: v.$fs-media;
+    font-weight: bold;
+    margin-bottom: v.$espacio-md;
+    color: v.$color-oscuro;
+  }
+}
+
+// Lista de ranking de ciudades
+.lista-ranking {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: v.$espacio-sm;
+
+  &__item {
+    display: flex;
+    align-items: center;
+    gap: v.$espacio-md;
+    background-color: v.$color-blanco;
+    border: 1px solid v.$color-borde;
+    border-radius: 6px;
+    padding: v.$espacio-md;
+  }
+
+  &__posicion {
+    font-size: v.$fs-grande;
+    font-weight: bold;
+    color: v.$color-principal;
+    min-width: 2rem;
+    text-align: center;
+  }
+
+  &__info {
+    flex: 1;
+  }
+
+  &__ciudad {
+    font-size: v.$fs-base;
+    font-weight: bold;
+    color: v.$color-oscuro;
+  }
+
+  &__pais {
+    font-size: v.$fs-pequena;
+    color: v.$color-gris;
+  }
+
+  &__puntuacion {
+    font-weight: bold;
+    font-size: v.$fs-pequena;
+    color: v.$color-principal;
+  }
+}
+
+// Panel de detalle por ciudad
+.panel-ciudad {
+  background-color: v.$color-blanco;
+  border: 1px solid v.$color-borde;
+  border-radius: 6px;
+  padding: v.$espacio-lg;
+
+  &__nota {
+    font-size: v.$fs-pequena;
+    color: v.$color-gris;
+    margin-bottom: v.$espacio-lg;
+  }
+
+  &__lista {
+    list-style: none;
+    padding: 0;
+    counter-reset: contador-puesto;
+    display: flex;
+    flex-direction: column;
+    gap: v.$espacio-md;
+  }
+
+  &__puesto {
+    counter-increment: contador-puesto;
+    display: flex;
+    align-items: center;
+    gap: v.$espacio-md;
+    padding-bottom: v.$espacio-md;
+    border-bottom: 1px solid v.$color-borde;
+
+    &:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    &::before {
+      content: counter(contador-puesto) ".";
+      font-weight: bold;
+      color: v.$color-principal;
+      min-width: 1.5rem;
+    }
+  }
+
+  &__nombre {
+    font-size: v.$fs-pequena;
+    color: v.$color-oscuro;
+  }
+}

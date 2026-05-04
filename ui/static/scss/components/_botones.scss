@@ -1,0 +1,46 @@
+// _botones.scss — Componente BEM: botones
+
+@use '../abstracts/variables' as v;
+
+// Placeholder base (no genera CSS solo; se hereda con @extend)
+%boton-base {
+  display: inline-block;
+  padding: 0.6rem 1.4rem;
+  border: 2px solid transparent;
+  border-radius: 4px;
+  font-size: v.$fs-pequena;
+  font-weight: bold;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.boton {
+  @extend %boton-base;
+
+  // Modificador: primario (relleno)
+  &--primario {
+    background-color: v.$color-principal;
+    color: v.$color-blanco;
+    border-color: v.$color-principal;
+
+    &:hover {
+      background-color: darken(#e8405a, 10%);
+      text-decoration: none;
+      color: v.$color-blanco;
+    }
+  }
+
+  // Modificador: contorno
+  &--contorno {
+    background-color: transparent;
+    color: v.$color-principal;
+    border-color: v.$color-principal;
+
+    &:hover {
+      background-color: v.$color-principal;
+      color: v.$color-blanco;
+      text-decoration: none;
+    }
+  }
+}

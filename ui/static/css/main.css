@@ -1,0 +1,584 @@
+/* 1. Reset y estilos base: Limpiamos los estilos por defecto del navegador para que la web se vea igual en todos lados. */
+
+*, *::before, *::after {
+  box-sizing: border-box; /* Evita que los bordes y rellenos hagan más grandes a los elementos */
+}
+
+*:not(dialog) {
+  margin: 0;
+}
+
+body {
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased; /* Suaviza el texto para que se lea mejor en pantallas de Apple */
+}
+
+img, picture, video, canvas, svg {
+  display: block;
+  max-width: 100%; /* Hace que las imágenes sean adaptables y no se salgan de la pantalla */
+}
+
+input, button, textarea, select {
+  font: inherit;
+}
+
+p, h1, h2, h3, h4, h5, h6 {
+  overflow-wrap: break-word; /* Obliga a las palabras muy largas a saltar de línea para no romper el diseño */
+}
+
+p {
+  text-wrap: pretty;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  text-wrap: balance;
+}
+
+/* 2. Tipografía y colores globales: Definimos el tipo de letra, los tamaños generales y el fondo de la página. */
+
+html {
+  font-size: 1rem;
+}
+
+body {
+  font-family: "Trebuchet MS", Arial, sans-serif;
+  font-size: 1rem;
+  color: #222222;
+  background-color: #f5f5f5;
+}
+
+/* ---ESTILOS PARA MÓVIL--- */
+h1 { font-size: 1.75rem; } 
+h2 { font-size: 1.5rem; }
+h3 { font-size: 1.25rem; }
+
+/* ---ESTILOS PARA ORDENADOR--- */
+@media (min-width: 768px) {
+  h1 { font-size: 2.25rem; }
+  h2 { font-size: 1.75rem; }
+}
+
+h1, h2, h3 {
+  line-height: 1.2;
+  color: #222222;
+}
+
+p {
+  line-height: 1.7;
+  color: #666666;
+}
+
+a {
+  color: #e8405a;
+  text-decoration: none; /* Quitamos el subrayado a los enlaces */
+}
+a:hover {
+  text-decoration: underline; /* Lo volvemos a poner cuando pasamos el ratón por encima */
+}
+
+/* 3. Componentes globales: Estilos para bloques que se repiten, como la cabecera, el pie de página, botones y tarjetas. */
+
+.cabecera {
+  background-color: #ffffff;
+  border-bottom: 2px solid #e8405a;
+}
+
+.cabecera__inner {
+  width: 100%;
+  max-width: 1000px;
+  margin-inline: auto; /* Centra la caja en el medio de la pantalla */
+  padding-inline: 1rem;
+  display: flex;
+  flex-direction: column; /* Apila el logo y el menú en móviles */
+  align-items: center;    /* Centra el contenido en móviles */
+  gap: 1rem;              /* Espacio entre el logo y el menú */
+  padding-block: 1rem;
+}
+
+/* Vuelve a poner el logo a la izquierda y menú a la derecha en pantallas grandes */
+@media (min-width: 768px) {
+  .cabecera__inner {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}
+
+.cabecera__logo {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #e8405a;
+  text-decoration: none;
+}
+.cabecera__logo span {
+  color: #222222;
+}
+
+.nav__lista {
+  list-style: none; /* Quita los puntos típicos de las listas */
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;         /* Permite que los botones bajen de línea si no caben */
+  justify-content: center; /* Centra los botones en pantallas pequeñas */
+  gap: 1rem; /* Deja un espacio entre los enlaces del menú */
+}
+
+.nav__enlace {
+  font-size: 0.875rem;
+  font-weight: bold;
+  color: #222222;
+  text-decoration: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  transition: background-color 0.2s ease, color 0.2s ease; /* Hace que el cambio de color al pasar el ratón sea suave */
+}
+.nav__enlace:hover {
+  background-color: #e8405a;
+  color: #ffffff;
+  text-decoration: none;
+}
+.nav__enlace--activo {
+  background-color: #e8405a;
+  color: #ffffff;
+}
+
+.pie {
+  background-color: #222222;
+  color: #ffffff;
+  padding-block: 2rem;
+  margin-top: 3rem;
+}
+.pie__inner {
+  width: 100%;
+  max-width: 1000px;
+  margin-inline: auto;
+  padding-inline: 1rem;
+  text-align: center;
+}
+.pie__texto {
+  font-size: 0.875rem;
+  color: #aaaaaa;
+}
+.pie__nav {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-bottom: 1rem;
+}
+.pie__enlace {
+  font-size: 0.875rem;
+  color: #aaaaaa;
+}
+.pie__enlace:hover {
+  color: #ffffff;
+  text-decoration: underline;
+}
+
+.boton {
+  display: inline-block;
+  padding: 0.8rem 1.6rem; /* Un poco más de relleno para dedos */
+  border: 2px solid transparent;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  text-align: center;
+  
+  width: 100%; /* En el móvil, que ocupe todo el ancho */
+}
+
+@media (min-width: 480px) {
+  .boton {
+    width: auto; /* En pantallas un poco más grandes, vuelve a su tamaño normal */
+  }
+}
+
+.boton--primario {
+  background-color: #e8405a;
+  color: #ffffff;
+  border-color: #e8405a;
+}
+.boton--primario:hover {
+  background-color: rgb(218.6682242991, 26.3317757009, 56.0981308411);
+  text-decoration: none;
+  color: #ffffff;
+}
+.boton--contorno {
+  background-color: transparent;
+  color: #e8405a;
+  border-color: #e8405a;
+}
+.boton--contorno:hover {
+  background-color: #e8405a;
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.tarjeta {
+  background-color: #ffffff;
+  border: 1px solid #dddddd;
+  border-radius: 6px;
+  overflow: hidden; /* Esconde todo lo que se salga de la tarjeta (como las esquinas de la imagen) */
+}
+.tarjeta__imagen {
+  width: 100%;
+  aspect-ratio: 16/9; /* Fuerza a la imagen a ser horizontal (panorámica) */
+  background-color: #dddddd;
+  -o-object-fit: cover;
+     object-fit: cover; /* Llena el espacio recortando la imagen para que no se vea aplastada */
+}
+.tarjeta__cuerpo {
+  padding: 1rem;
+}
+.tarjeta__categoria {
+  font-size: 0.875rem;
+  font-weight: bold;
+  color: #e8405a;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+.tarjeta__titulo {
+  font-size: 1.25rem;
+  color: #222222;
+  margin-bottom: 0.5rem;
+}
+.tarjeta__texto {
+  font-size: 0.875rem;
+  color: #666666;
+  margin-bottom: 1rem;
+}
+.tarjeta__meta {
+  font-size: 0.875rem;
+  color: #666666;
+}
+
+/* 4. Secciones específicas: Diseño particular para las secciones de portada (Hero), Noticias, Ranking y Reseñas. */
+
+.hero {
+  background-color: #ffffff;
+  padding-block: 3rem;
+  border-bottom: 1px solid #dddddd;
+}
+.hero__inner {
+  width: 100%;
+  max-width: 1000px;
+  margin-inline: auto;
+  padding-inline: 1rem;
+}
+.hero__titulo {
+  font-size: 2.25rem;
+  color: #222222;
+  margin-bottom: 1rem;
+}
+.hero__titulo em {
+  font-style: normal; /* Le quita la cursiva a la etiqueta 'em' para solo cambiarle el color */
+  color: #e8405a;
+}
+.hero__subtitulo {
+  font-size: 1.25rem;
+  color: #666666;
+  margin-bottom: 2rem;
+  max-width: 55ch; /* Limita el ancho del texto a 55 letras para que sea más fácil de leer */
+}
+.hero__acciones {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap; /* Si los botones no caben en una línea, bajan a la siguiente */
+}
+
+.noticias {
+  padding-block: 3rem;
+}
+.noticias__inner {
+  width: 100%;
+  max-width: 1000px;
+  margin-inline: auto;
+  padding-inline: 1rem;
+}
+.noticias__titulo {
+  font-size: 1.75rem;
+  margin-bottom: 2rem;
+}
+.noticias__rejilla {
+  display: grid;
+  grid-template-columns: 1fr; /* En móviles, las noticias se ven en una sola columna */
+  gap: 2rem;
+}
+@media (min-width: 768px) {
+  .noticias__rejilla {
+    grid-template-columns: repeat(3, 1fr); /* En pantallas grandes, divide las noticias en 3 columnas iguales */
+  }
+}
+
+.ranking {
+  padding-block: 3rem;
+}
+.ranking__inner {
+  width: 100%;
+  max-width: 1000px;
+  margin-inline: auto;
+  padding-inline: 1rem;
+}
+.ranking__titulo {
+  font-size: 1.75rem;
+  margin-bottom: 0.5rem;
+}
+.ranking__subtitulo {
+  font-size: 0.875rem;
+  color: #666666;
+  margin-bottom: 2rem;
+}
+.ranking__columnas {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3rem;
+}
+@media (min-width: 768px) {
+  .ranking__columnas {
+    grid-template-columns: 1fr 1fr; /* En pantallas grandes, pone las columnas del ranking de dos en dos */
+  }
+}
+.ranking__subtitulo-panel {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  color: #222222;
+}
+
+.lista-ranking {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column; /* Apila los elementos de la lista uno encima del otro */
+  gap: 0.5rem;
+}
+.lista-ranking__item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background-color: #ffffff;
+  border: 1px solid #dddddd;
+  border-radius: 6px;
+  padding: 1rem;
+}
+.lista-ranking__posicion {
+  font-size: 1.75rem;
+  font-weight: bold;
+  color: #e8405a;
+  min-width: 2rem;
+  text-align: center;
+}
+.lista-ranking__info {
+  flex: 1; /* Hace que este bloque ocupe todo el espacio sobrante disponible */
+}
+.lista-ranking__ciudad {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #222222;
+}
+.lista-ranking__pais {
+  font-size: 0.875rem;
+  color: #666666;
+}
+.lista-ranking__puntuacion {
+  font-weight: bold;
+  font-size: 0.875rem;
+  color: #e8405a;
+}
+
+.panel-ciudad {
+  background-color: #ffffff;
+  border: 1px solid #dddddd;
+  border-radius: 6px;
+  padding: 2rem;
+}
+.panel-ciudad__nota {
+  font-size: 0.875rem;
+  color: #666666;
+  margin-bottom: 2rem;
+}
+.panel-ciudad__lista {
+  list-style: none;
+  padding: 0;
+  counter-reset: contador-puesto; /* Prepara un contador interno para poner los números automáticamente */
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.panel-ciudad__puesto {
+  counter-increment: contador-puesto; /* Suma 1 al contador cada vez que sale este elemento */
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #dddddd;
+}
+.panel-ciudad__puesto:last-child {
+  border-bottom: none; /* Le quita el borde de abajo al último elemento para que quede más limpio */
+  padding-bottom: 0;
+}
+.panel-ciudad__puesto::before {
+  content: counter(contador-puesto) "."; /* Imprime el número del contador seguido de un punto */
+  font-weight: bold;
+  color: #e8405a;
+  min-width: 1.5rem;
+}
+.panel-ciudad__nombre {
+  font-size: 0.875rem;
+  color: #222222;
+}
+
+.resenas {
+  padding-block: 3rem;
+}
+.resenas__inner {
+  width: 100%;
+  max-width: 1000px;
+  margin-inline: auto;
+  padding-inline: 1rem;
+}
+.resenas__titulo {
+  font-size: 1.75rem;
+  margin-bottom: 0.5rem;
+}
+.resenas__buscador {
+  margin-bottom: 0.5rem;
+  width: 100%; /* Ocupa todo el ancho en móvil */
+  max-width: 500px;
+}
+.resenas__nota-buscador {
+  font-size: 0.875rem;
+  color: #666666;
+  margin-bottom: 3rem;
+}
+
+.ficha {
+  background-color: #ffffff;
+  border: 1px solid #dddddd;
+  border-radius: 6px;
+  padding: 1rem; /* Menos espacio en móvil para que quepa más texto */
+  margin-bottom: 2rem;
+}
+
+@media (min-width: 768px) {
+  .ficha {
+    padding: 2rem; /* En ordenador recuperamos el espacio generoso */
+  }
+}
+.ficha__cabecera {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #dddddd;
+}
+.ficha__nombre {
+  font-size: 1.75rem;
+  color: #222222;
+}
+.ficha__ciudad {
+  font-size: 0.875rem;
+  color: #666666;
+}
+.ficha__valoracion {
+  font-size: 1.75rem;
+  font-weight: bold;
+  color: #e8405a;
+}
+.ficha__cuerpo {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+@media (min-width: 768px) {
+  .ficha__cuerpo {
+    grid-template-columns: 1fr 1fr 1fr; /* Divide el contenido de la ficha en 3 columnas en PC */
+  }
+}
+.ficha__col-titulo {
+  font-size: 0.875rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #666666;
+  margin-bottom: 1rem;
+}
+.ficha__menu {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.ficha__plato {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px dashed #dddddd; /* Pone una línea separadora hecha de guiones */
+}
+.ficha__plato:last-child {
+  border-bottom: none;
+}
+.ficha__nombre-plato {
+  font-size: 0.875rem;
+  color: #222222;
+}
+.ficha__precio {
+  font-size: 0.875rem;
+  font-weight: bold;
+  color: #e8405a;
+}
+.ficha__recomendaciones {
+  font-size: 0.875rem;
+  color: #666666;
+  line-height: 1.7;
+}
+/* Estilos para el formulario de Registro */
+.seccion-formulario {
+  padding-block: 3rem;
+  background-color: #ffffff;
+}
+
+.contenedor-pequeno {
+  max-width: 450px; /* Formulario estrecho para que se vea bien en móvil */
+  margin-inline: auto;
+  padding-inline: 1.5rem;
+}
+
+.formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.formulario__grupo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.formulario__etiqueta {
+  font-size: 0.875rem;
+  font-weight: bold;
+  color: #222222;
+}
+
+.formulario__input {
+  padding: 0.8rem;
+  border: 1px solid #dddddd;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.formulario__acciones {
+  margin-top: 1rem;
+}
+
+.titulo-centrado { text-align: center; margin-bottom: 0.5rem; }
+.subtitulo-centrado { text-align: center; font-size: 0.875rem; color: #666666; }

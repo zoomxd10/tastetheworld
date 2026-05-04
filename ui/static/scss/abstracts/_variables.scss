@@ -1,0 +1,28 @@
+// _variables.scss — Variables globales del proyecto
+
+// Colores
+$color-principal:  #e8405a;
+$color-oscuro:     #222222;
+$color-gris:       #666666;
+$color-fondo:      #f5f5f5;
+$color-blanco:     #ffffff;
+$color-borde:      #dddddd;
+
+// Tipografía
+$fuente-base: 'Trebuchet MS', Arial, sans-serif;
+
+// Tamaños de fuente (base 1rem = 16px)
+$fs-pequena:  0.875rem;   // 14px
+$fs-base:     1rem;       // 16px
+$fs-media:    1.25rem;    // 20px
+$fs-grande:   1.75rem;    // 28px
+$fs-titulo:   2.25rem;    // 36px
+
+// Espaciado
+$espacio-sm:  0.5rem;
+$espacio-md:  1rem;
+$espacio-lg:  2rem;
+$espacio-xl:  3rem;
+
+// Ancho máximo del contenedor
+$ancho-max: 1000px;

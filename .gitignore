@@ -1,0 +1,14 @@
+# Binaries
+*.exe
+/web
+/tastetheworld
+
+# Go
+/vendor/
+
+# Editor / OS
+.vscode/
+.idea/
+Thumbs.db
+desktop.ini
+.DS_Store

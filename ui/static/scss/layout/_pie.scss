@@ -1,0 +1,40 @@
+// Componente BEM: Pie de página (Footer). La zona oscura que cierra la web por abajo.
+
+@use '../abstracts/variables' as v; // Importamos nuestros colores y espacios
+@use '../abstracts/mixins' as m;    // Importamos nuestros atajos (como el del contenedor)
+
+.pie {
+  background-color: v.$color-oscuro;
+  color: v.$color-blanco; // Letra blanca para que contraste bien con el fondo oscuro
+  padding-block: v.$espacio-lg;
+  margin-top: v.$espacio-xl; // Le damos un buen empujón hacia abajo para separarlo bien del contenido principal
+
+  &__inner {
+    @include m.contenedor; // Usamos el atajo para centrar este bloque y darle un ancho máximo
+    text-align: center; // Centramos todo el texto (enlaces, copyright...)
+  }
+
+  &__texto {
+    font-size: v.$fs-pequena;
+    color: #aaaaaa; // Usamos un gris clarito para que no quite protagonismo (ej. para el copyright)
+  }
+
+  &__nav {
+    list-style: none; // Fuera los puntos por defecto de las listas
+    padding: 0;
+    display: flex;
+    justify-content: center; // Ponemos todos los enlaces agrupados justo en el medio
+    gap: v.$espacio-lg; // Dejamos un espacio generoso entre ellos para que sea fácil hacer clic (sobre todo en móviles)
+    margin-bottom: v.$espacio-md;
+  }
+
+  &__enlace {
+    font-size: v.$fs-pequena;
+    color: #aaaaaa; // Los enlaces nacen con un color gris discreto
+
+    &:hover {
+      color: v.$color-blanco; // Al pasar el ratón se "iluminan" en blanco brillante
+      text-decoration: underline; // Y les ponemos la típica rayita debajo para dejar clarísimo que son botones
+    }
+  }
+}

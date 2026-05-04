@@ -1,0 +1,63 @@
+// _inicio.scss — Estilos específicos de la página de inicio
+
+@use '../abstracts/variables' as v;
+@use '../abstracts/mixins' as m;
+
+// Sección hero (presentación)
+.hero {
+  background-color: v.$color-blanco;
+  padding-block: v.$espacio-xl;
+  border-bottom: 1px solid v.$color-borde;
+
+  &__inner {
+    @include m.contenedor;
+  }
+
+  &__titulo {
+    font-size: v.$fs-titulo;
+    color: v.$color-oscuro;
+    margin-bottom: v.$espacio-md;
+
+    em {
+      font-style: normal;
+      color: v.$color-principal;
+    }
+  }
+
+  &__subtitulo {
+    font-size: v.$fs-media;
+    color: v.$color-gris;
+    margin-bottom: v.$espacio-lg;
+    max-width: 55ch;
+  }
+
+  &__acciones {
+    display: flex;
+    gap: v.$espacio-md;
+    flex-wrap: wrap;
+  }
+}
+
+// Sección de noticias
+.noticias {
+  padding-block: v.$espacio-xl;
+
+  &__inner {
+    @include m.contenedor;
+  }
+
+  &__titulo {
+    font-size: v.$fs-grande;
+    margin-bottom: v.$espacio-lg;
+  }
+
+  &__rejilla {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: v.$espacio-lg;
+
+    @include m.escritorio {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+}

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Ranking de ciudades y puestos de street food más valorados por la comunidad TastetheWorld.">
+  <meta name="author" content="TastetheWorld">
+  <title>Ranking — TastetheWorld</title>
+  <link rel="stylesheet" href="/static/css/main.css">
+</head>
+<body>
+
+  <header class="cabecera">
+    <div class="cabecera__inner">
+
+      <a href="/" class="cabecera__logo">
+        Taste<span>the</span>World
+      </a>
+
+      <nav aria-label="Navegación principal">
+        <ul class="nav__lista">
+          <li><a href="/"   class="nav__enlace">Inicio</a></li>
+          <li><a href="/ranking" class="nav__enlace nav__enlace--activo">Ranking</a></li>
+          <li><a href="/resenas" class="nav__enlace">Reseñas</a></li>
+          <li><a href="/registro" class="nav__enlace nav__enlace--inactivo">Registro</a></li>
+        </ul>
+      </nav>
+
+    </div>
+  </header>
+
+  <main>
+    <section class="ranking">
+      <div class="ranking__inner">
+
+        <h1 class="ranking__titulo">Ranking de Street Food</h1>
+        <p class="ranking__subtitulo">Los mejores destinos valorados por nuestra comunidad</p>
+
+        <div class="ranking__columnas">
+
+          <section aria-labelledby="titulo-ciudades">
+            <h2 class="ranking__subtitulo-panel" id="titulo-ciudades">Top ciudades foodies</h2>
+
+            <ol class="lista-ranking" aria-label="Ranking de ciudades con mejor street food">
+
+              <li class="lista-ranking__item">
+                <span class="lista-ranking__posicion">1</span>
+                <div class="lista-ranking__info">
+                  <p class="lista-ranking__ciudad">Bangkok</p>
+                  <p class="lista-ranking__pais">Tailandia</p>
+                </div>
+                <strong class="lista-ranking__puntuacion">9.8 / 10</strong>
+              </li>
+
+              <li class="lista-ranking__item">
+                <span class="lista-ranking__posicion">2</span>
+                <div class="lista-ranking__info">
+                  <p class="lista-ranking__ciudad">Ciudad de México</p>
+                  <p class="lista-ranking__pais">México</p>
+                </div>
+                <strong class="lista-ranking__puntuacion">9.6 / 10</strong>
+              </li>
+
+              <li class="lista-ranking__item">
+                <span class="lista-ranking__posicion">3</span>
+                <div class="lista-ranking__info">
+                  <p class="lista-ranking__ciudad">Hanói</p>
+                  <p class="lista-ranking__pais">Vietnam</p>
+                </div>
+                <strong class="lista-ranking__puntuacion">9.4 / 10</strong>
+              </li>
+
+              <li class="lista-ranking__item">
+                <span class="lista-ranking__posicion">4</span>
+                <div class="lista-ranking__info">
+                  <p class="lista-ranking__ciudad">Marrakech</p>
+                  <p class="lista-ranking__pais">Marruecos</p>
+                </div>
+                <strong class="lista-ranking__puntuacion">9.2 / 10</strong>
+              </li>
+
+              <li class="lista-ranking__item">
+                <span class="lista-ranking__posicion">5</span>
+                <div class="lista-ranking__info">
+                  <p class="lista-ranking__ciudad">Mumbai</p>
+                  <p class="lista-ranking__pais">India</p>
+                </div>
+                <strong class="lista-ranking__puntuacion">9.1 / 10</strong>
+              </li>
+
+            </ol>
+          </section>
+
+          <section class="panel-ciudad" aria-labelledby="titulo-puestos">
+
+            <h2 class="ranking__subtitulo-panel" id="titulo-puestos">
+              Mejores puestos — Bangkok
+            </h2>
+
+            <p class="panel-ciudad__nota">
+              Puestos mejor valorados por la comunidad en la ciudad seleccionada.
+            </p>
+
+            <ol class="panel-ciudad__lista" aria-label="Top 5 puestos en Bangkok">
+              <li class="panel-ciudad__puesto">
+                <span class="panel-ciudad__nombre">Pad Thai Wok Rambuttri</span>
+              </li>
+              <li class="panel-ciudad__puesto">
+                <span class="panel-ciudad__nombre">Jay Fai</span>
+              </li>
+              <li class="panel-ciudad__puesto">
+                <span class="panel-ciudad__nombre">Nay Hong Curry Stall</span>
+              </li>
+              <li class="panel-ciudad__puesto">
+                <span class="panel-ciudad__nombre">Hoy Tod Chaw Lae</span>
+              </li>
+              <li class="panel-ciudad__puesto">
+                <span class="panel-ciudad__nombre">Khao Niew Mamuang</span>
+              </li>
+            </ol>
+
+          </section>
+
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="pie">
+    <div class="pie__inner">
+      <ul class="pie__nav">
+        <li><a href="/"    class="pie__enlace">Inicio</a></li>
+        <li><a href="/ranking"  class="pie__enlace">Ranking</a></li>
+        <li><a href="/resenas"  class="pie__enlace">Reseñas</a></li>
+        <li><a href="/registro" class="pie__enlace">Registro</a></li>
+      </ul>
+      <p class="pie__texto">
+        <small>© <time datetime="2026">2026</time> TastetheWorld. Todos los derechos reservados.</small>
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>

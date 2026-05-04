@@ -1,0 +1,46 @@
+// Componente BEM: Tarjetas de contenido. Estructura visual de las tarjetas usando nuestras variables.
+
+@use '../abstracts/variables' as v; // Nos traemos nuestras variables (colores, tamaños, espacios)
+
+.tarjeta {
+  background-color: v.$color-blanco;
+  border: 1px solid v.$color-borde;
+  border-radius: 6px; // Suaviza un poco las esquinas de la caja principal
+  overflow: hidden; // Corta todo lo que sobresalga (así la foto de arriba respeta las esquinas redondeadas)
+
+  &__imagen { // Gracias al '&', SCSS convierte esto en '.tarjeta__imagen' al compilar
+    width: 100%;
+    aspect-ratio: 16 / 9; // Obliga a la imagen a tener proporciones panorámicas siempre
+    background-color: v.$color-borde; // Color de fondo por si la imagen tarda en cargar
+    object-fit: cover; // Hace que la foto llene todo el hueco recortando el sobrante, sin aplastarse
+  }
+
+  &__cuerpo {
+    padding: v.$espacio-md; // Relleno interior para que los textos no se peguen a los bordes de la tarjeta
+  }
+
+  &__categoria {
+    font-size: v.$fs-pequena;
+    font-weight: bold;
+    color: v.$color-principal;
+    text-transform: uppercase; // Convierte el texto a mayúsculas automáticamente
+    margin-bottom: v.$espacio-sm;
+  }
+
+  &__titulo {
+    font-size: v.$fs-media;
+    color: v.$color-oscuro;
+    margin-bottom: v.$espacio-sm; // Espacio debajo del título para separarlo del párrafo
+  }
+
+  &__texto {
+    font-size: v.$fs-pequena;
+    color: v.$color-gris;
+    margin-bottom: v.$espacio-md;
+  }
+
+  &__meta { // Información extra al final de la tarjeta 
+    font-size: v.$fs-pequena;
+    color: v.$color-gris;
+  }
+}

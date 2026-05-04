@@ -1,0 +1,126 @@
+// _resenas.scss — Estilos específicos de la página de reseñas
+
+@use '../abstracts/variables' as v;
+@use '../abstracts/mixins' as m;
+
+.resenas {
+  padding-block: v.$espacio-xl;
+
+  &__inner {
+    @include m.contenedor;
+  }
+
+  &__titulo {
+    font-size: v.$fs-grande;
+    margin-bottom: v.$espacio-sm;
+  }
+
+  &__buscador {
+    margin-bottom: v.$espacio-sm;
+    width: 100%; // <-- MEJORA MOBILE FIRST: Ocupa todo el ancho en el móvil
+    max-width: 500px; 
+  }
+
+  &__nota-buscador {
+    font-size: v.$fs-pequena;
+    color: v.$color-gris;
+    margin-bottom: v.$espacio-xl;
+  }
+}
+
+// Ficha de restaurante / puesto
+.ficha {
+  background-color: v.$color-blanco;
+  border: 1px solid v.$color-borde;
+  border-radius: 6px;
+  
+  // <-- MEJORA MOBILE FIRST: Menos espacio interior en móviles para aprovechar la pantalla
+  padding: v.$espacio-md; 
+  margin-bottom: v.$espacio-lg;
+
+  @include m.escritorio {
+    padding: v.$espacio-lg; // Recupera el espacio amplio en PC
+  }
+
+  &__cabecera {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: v.$espacio-md;
+    margin-bottom: v.$espacio-lg;
+    padding-bottom: v.$espacio-md;
+    border-bottom: 1px solid v.$color-borde;
+  }
+
+  &__nombre {
+    font-size: v.$fs-grande;
+    color: v.$color-oscuro;
+  }
+
+  &__ciudad {
+    font-size: v.$fs-pequena;
+    color: v.$color-gris;
+  }
+
+  &__valoracion {
+    font-size: v.$fs-grande;
+    font-weight: bold;
+    color: v.$color-principal;
+  }
+
+  &__cuerpo {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: v.$espacio-lg;
+
+    @include m.escritorio {
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+  }
+
+  &__col-titulo {
+    font-size: v.$fs-pequena;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: v.$color-gris;
+    margin-bottom: v.$espacio-md;
+  }
+
+  // Lista de platos con precio
+  &__menu {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: v.$espacio-sm;
+  }
+
+  &__plato {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: v.$espacio-sm;
+    border-bottom: 1px dashed v.$color-borde;
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  &__nombre-plato {
+    font-size: v.$fs-pequena;
+    color: v.$color-oscuro;
+  }
+
+  &__precio {
+    font-size: v.$fs-pequena;
+    font-weight: bold;
+    color: v.$color-principal;
+  }
+
+  &__recomendaciones {
+    font-size: v.$fs-pequena;
+    color: v.$color-gris;
+    line-height: 1.7;
+  }
+}

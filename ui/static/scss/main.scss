@@ -1,0 +1,24 @@
+// main.scss — Punto de entrada principal
+// Compilar con: sass scss/main.scss css/main.css
+
+// 1. Abstracciones (no generan CSS por sí solas)
+@use 'abstracts/variables';
+@use 'abstracts/mixins';
+
+// 2. Base
+@use 'base/reset';
+@use 'base/tipografia';
+
+// 3. Maqueta
+@use 'layout/cabecera';
+@use 'layout/pie';
+
+// 4. Componentes reutilizables
+@use 'components/botones';
+@use 'components/tarjetas';
+@use 'components/formularios';
+
+// 5. Páginas específicas
+@use 'pages/inicio';
+@use 'pages/ranking';
+@use 'pages/resenas';

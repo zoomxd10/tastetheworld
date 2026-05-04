@@ -1,0 +1,32 @@
+// _mixins.scss — Mixins reutilizables
+
+@use 'variables' as v;
+
+// Contenedor centrado con ancho máximo
+@mixin contenedor {
+  width: 100%;
+  max-width: v.$ancho-max;
+  margin-inline: auto;
+  padding-inline: v.$espacio-md;
+}
+
+// Flexbox centrado
+@mixin flex-centro {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+// Flexbox entre extremos
+@mixin flex-entre {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+// Consulta de medios — escritorio (móviles primero)
+@mixin escritorio {
+  @media (min-width: 768px) {
+    @content;
+  }
+}

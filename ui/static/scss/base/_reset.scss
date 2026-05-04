@@ -1,0 +1,35 @@
+// 1. Reinicio de CSS (Reset): Limpiamos los estilos por defecto del navegador para tener una buena base.
+
+*, *::before, *::after {
+  box-sizing: border-box; // Evita que bordes y rellenos sumen tamaño extra a las cajas
+}
+
+*:not(dialog) {
+  margin: 0; // Quitamos los márgenes de todo 
+}
+
+body {
+  line-height: 1.5; 
+  -webkit-font-smoothing: antialiased; // Hace que la letra se lea más nítida
+}
+
+img, picture, video, canvas, svg {
+  display: block;
+  max-width: 100%; // Las imágenes y videos se adaptan y nunca se salen de la pantalla
+}
+
+input, button, textarea, select {
+  font: inherit; // Obliga a los formularios a usar el mismo tipo de letra que el resto de la web
+}
+
+p, h1, h2, h3, h4, h5, h6 {
+  overflow-wrap: break-word; // Corta las palabras muy largas si van a romper el diseño
+}
+
+p {
+  text-wrap: pretty; // Evita que quede una sola palabra suelta en la última línea de un párrafo
+}
+
+h1, h2, h3, h4, h5, h6 {
+  text-wrap: balance; // Equilibra las líneas de los títulos para que queden pareadas
+}

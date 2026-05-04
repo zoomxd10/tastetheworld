@@ -1,0 +1,38 @@
+// 2. Tipografía: Estilos base de texto y uso de variables de diseño.
+
+@use '../abstracts/variables' as v; // Traemos nuestras variables (colores, tamaños) y las llamamos 'v' para escribir menos
+
+html {
+  font-size: 1rem; // Tamaño base del documento (suele equivaler a 16px)
+}
+
+body {
+  font-family: v.$fuente-base; // Aplicamos la fuente principal de la web
+  font-size: v.$fs-base;
+  color: v.$color-oscuro;
+  background-color: v.$color-fondo; // Color de fondo general de toda la página
+}
+
+// Asignamos los tamaños de los títulos tirando de las variables
+h1 { font-size: v.$fs-titulo; }
+h2 { font-size: v.$fs-grande; }
+h3 { font-size: v.$fs-media; }
+
+h1, h2, h3 {
+  line-height: 1.2; // Juntamos un poco más las líneas en los títulos para que se vean compactos
+  color: v.$color-oscuro;
+}
+
+p {
+  line-height: 1.7; // Damos más espacio entre líneas en los párrafos para que la lectura canse menos
+  color: v.$color-gris;
+}
+
+a {
+  color: v.$color-principal;
+  text-decoration: none; // Le quitamos el subrayado típico a los enlaces
+
+  &:hover {
+    text-decoration: underline; // Gracias a SCSS, usamos '&' para decirle: "cuando pases el ratón por este mismo enlace, subráyalo"
+  }
+}
