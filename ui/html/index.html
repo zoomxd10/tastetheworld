@@ -1,36 +1,11 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="TastetheWorld — Guía de street food. Descubre los mejores puestos de comida callejera del mundo.">
-  <meta name="author" content="TastetheWorld">
-  <title>TastetheWorld — Inicio</title>
-  <link rel="stylesheet" href="/static/css/main.css">
-</head>
-<body>
+{{/* index.html — Página de inicio. Extiende base.html. */}}
+{{template "base" .}}
 
-  <header class="cabecera">
-    <div class="cabecera__inner">
+{{define "titulo"}}TastetheWorld — Inicio{{end}}
+{{define "descripcion"}}TastetheWorld — Guía de street food. Descubre los mejores puestos de comida callejera del mundo.{{end}}
+{{define "nav-inicio"}}nav__enlace--activo{{end}}
 
-      <a href="/" class="cabecera__logo">
-        Taste<span>the</span>World
-      </a>
-
-      <nav aria-label="Navegación principal">
-        <ul class="nav__lista">
-          <li><a href="/" class="nav__enlace nav__enlace--activo">Inicio</a></li>
-          <li><a href="/ranking" class="nav__enlace">Ranking</a></li>
-          <li><a href="/resenas" class="nav__enlace">Reseñas</a></li>
-          <li><a href="/registro" class="nav__enlace nav__enlace--inactivo">Registro</a></li>
-        </ul>
-      </nav>
-
-    </div>
-  </header>
-
-  <main>
-
+{{define "contenido"}}
     <section class="hero">
       <div class="hero__inner">
 
@@ -75,7 +50,7 @@
           </article>
 
           <article class="tarjeta">
-             <img class="tarjeta__imagen" src="/static/img/Tacos.jpg" alt="Foto de tacos mexicanos">
+            <img class="tarjeta__imagen" src="/static/img/Tacos.jpg" alt="Foto de tacos mexicanos">
             <div class="tarjeta__cuerpo">
               <p class="tarjeta__categoria">Ingredientes</p>
               <h3 class="tarjeta__titulo">Los 5 ingredientes que están revolucionando los tacos</h3>
@@ -90,7 +65,7 @@
           </article>
 
           <article class="tarjeta">
-             <img class="tarjeta__imagen" src="/static/img/Bangkok.jpg" alt="Foto de mercado nocturno en Bangkok">
+            <img class="tarjeta__imagen" src="/static/img/Bangkok.jpg" alt="Foto de mercado nocturno en Bangkok">
             <div class="tarjeta__cuerpo">
               <p class="tarjeta__categoria">Premios</p>
               <h3 class="tarjeta__titulo">Bangkok nombrada capital del street food 2026</h3>
@@ -107,22 +82,4 @@
         </div>
       </div>
     </section>
-
-  </main>
-
-  <footer class="pie">
-    <div class="pie__inner">
-      <ul class="pie__nav">
-        <li><a href="/" class="pie__enlace">Inicio</a></li>
-        <li><a href="/ranking" class="pie__enlace">Ranking</a></li>
-        <li><a href="/resenas" class="pie__enlace">Reseñas</a></li>
-        <li><a href="/registro" class="pie__enlace">Registro</a></li>
-      </ul>
-      <p class="pie__texto">
-        <small>© <time datetime="2026">2026</time> TastetheWorld. Todos los derechos reservados.</small>
-      </p>
-    </div>
-  </footer>
-
-</body>
-</html>
+{{end}}

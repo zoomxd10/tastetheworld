@@ -1,0 +1,62 @@
+{{/* login.html — Formulario de inicio de sesión.
+     Recibe DatosFormularioLogin{DatosBase, MensajeError, EmailValor}. */}}
+{{template "base" .}}
+
+{{define "titulo"}}Iniciar sesión — TastetheWorld{{end}}
+{{define "descripcion"}}Inicia sesión en TastetheWorld para acceder a tu cuenta.{{end}}
+{{define "nav-login"}}nav__enlace--activo{{end}}
+
+{{define "contenido"}}
+    <section class="seccion-formulario">
+      <div class="contenedor-pequeno">
+
+        <h1 class="titulo-centrado">Iniciar sesión</h1>
+        <p class="subtitulo-centrado">Bienvenido de nuevo. Introduce tus datos para continuar.</p>
+
+        {{if and . .MensajeError}}
+          <div class="alerta alerta--error" role="alert">
+            ⚠ {{.MensajeError}}
+          </div>
+        {{end}}
+
+        <form action="/login" method="POST" class="formulario" novalidate>
+
+          <div class="formulario__campo">
+            <label for="email" class="formulario__etiqueta">Correo electrónico</label>
+            <input
+              class="formulario__input"
+              type="email"
+              id="email"
+              name="email"
+              value="{{if .}}{{.EmailValor}}{{end}}"
+              required
+              autocomplete="email"
+              placeholder="tu@email.com">
+          </div>
+
+          <div class="formulario__campo">
+            <label for="password" class="formulario__etiqueta">Contraseña</label>
+            <input
+              class="formulario__input"
+              type="password"
+              id="password"
+              name="password"
+              required
+              autocomplete="current-password"
+              placeholder="Tu contraseña">
+          </div>
+
+          <button type="submit" class="boton boton--primario boton--ancho">
+            Iniciar sesión
+          </button>
+
+        </form>
+
+        <p class="formulario__pie">
+          ¿Aún no tienes cuenta?
+          <a href="/registro" class="formulario__enlace">Crear una cuenta</a>
+        </p>
+
+      </div>
+    </section>
+{{end}}

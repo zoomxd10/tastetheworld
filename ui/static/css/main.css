@@ -582,3 +582,122 @@ a:hover {
 
 .titulo-centrado { text-align: center; margin-bottom: 0.5rem; }
 .subtitulo-centrado { text-align: center; font-size: 0.875rem; color: #666666; }
+/* === ALERTAS (añadido PEC 2) === */
+.alerta {
+  padding: 1rem 1.25rem;
+  border-radius: 6px;
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+.alerta--error {
+  background-color: #fef2f2;
+  border: 1px solid #fca5a5;
+  color: #b91c1c;
+}
+.alerta--exito {
+  background-color: #f0fdf4;
+  border: 1px solid #86efac;
+  color: #166534;
+}
+.buscador__boton {
+  margin-left: 0.5rem;
+}
+.boton--ancho {
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+/* === Clases de utilidad (reemplaza style="" inline) === */
+.oculto {
+  display: none;
+}
+.boton--bloque {
+  display: block;
+  margin-top: 1rem;
+}
+
+/* ============================================================
+   ICONO DE USUARIO CON INICIALES
+   ============================================================ */
+
+/* Contenedor del icono + botón de logout en el nav */
+.nav__usuario {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* Círculo con las iniciales del usuario */
+.usuario__icono {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  background-color: #7b2d3e;
+  color: #ffffff;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  cursor: default;
+  flex-shrink: 0;
+  user-select: none;
+}
+
+/* Formulario invisible que envuelve el botón de cerrar sesión */
+.nav__logout-form {
+  margin: 0;
+  padding: 0;
+}
+
+/* Botón de cerrar sesión con aspecto de enlace */
+.nav__enlace--logout {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: inherit;
+  padding: 0;
+  color: inherit;
+  opacity: 0.75;
+  transition: opacity 0.2s;
+}
+.nav__enlace--logout:hover {
+  opacity: 1;
+}
+
+/* Enlace de "Iniciar sesión" con aspecto diferenciado */
+.nav__enlace--login {
+  border: 1px solid currentColor;
+  border-radius: 4px;
+  padding: 0.25rem 0.75rem;
+}
+
+/* ============================================================
+   FORMULARIOS: PIE Y ENLACE
+   ============================================================ */
+.formulario__pie {
+  margin-top: 1.25rem;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #555;
+}
+.formulario__enlace {
+  color: #7b2d3e;
+  text-decoration: underline;
+  font-weight: 600;
+}
+.formulario__enlace:hover {
+  color: #5a2030;
+}
+
+/* Enlace dentro de alertas */
+.alerta__enlace {
+  display: inline-block;
+  margin-top: 0.4rem;
+  font-weight: 600;
+  text-decoration: underline;
+  color: inherit;
+}

@@ -1,81 +1,92 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Únete a TastetheWorld. Crea tu cuenta para valorar los mejores puestos de street food del mundo.">
-  <meta name="author" content="TastetheWorld">
-  <title>Registro — TastetheWorld</title>
-  <link rel="stylesheet" href="/static/css/main.css">
-</head>
-<body>
+{{/* registro.html — Formulario de registro de usuario.
+     Recibe DatosFormularioRegistro{DatosBase, MensajeError, MensajeExito, NombreValor, EmailValor}.
+     Muestra errores inline y conserva los campos al haber fallo.
+     Al registrarse con éxito muestra un mensaje de confirmación con el nombre.
+     Si el email ya existe el error incluye un enlace directo a login. */}}
+{{template "base" .}}
 
-  <header class="cabecera">
-    <div class="cabecera__inner">
+{{define "titulo"}}Registro — TastetheWorld{{end}}
+{{define "descripcion"}}Únete a TastetheWorld. Crea tu cuenta para valorar los mejores puestos de street food del mundo.{{end}}
+{{define "nav-registro"}}nav__enlace--activo{{end}}
 
-      <a href="/" class="cabecera__logo">
-        Taste<span>the</span>World
-      </a>
-
-      <nav aria-label="Navegación principal">
-        <ul class="nav__lista">
-          <li><a href="/" class="nav__enlace">Inicio</a></li>
-          <li><a href="/ranking" class="nav__enlace">Ranking</a></li>
-          <li><a href="/resenas" class="nav__enlace">Reseñas</a></li>
-          <li><a href="/registro" class="nav__enlace nav__enlace--activo">Registro</a></li>
-        </ul>
-      </nav>
-
-    </div>
-  </header>
-
-  <main>
+{{define "contenido"}}
     <section class="seccion-formulario">
       <div class="contenedor-pequeno">
-        
+
         <h1 class="titulo-centrado">Crear nueva cuenta</h1>
         <p class="subtitulo-centrado">Únete a nuestra comunidad de foodies y comparte tus experiencias.</p>
 
-        <form action="/registro" method="POST" class="formulario">
-          
-          <div class="formulario__grupo">
-            <label for="nombre" class="formulario__etiqueta">Nombre completo</label>
-            <input type="text" id="nombre" name="nombre" class="formulario__input" placeholder="Tu nombre" required>
+        {{if and . .MensajeError}}
+          <div class="alerta alerta--error" role="alert">
+            ⚠ {{.MensajeError}}
+            {{/* Si el mensaje menciona iniciar sesión, mostrar enlace directo */}}
+            {{if and . .EmailValor}}
+              <a href="/login" class="alerta__enlace">Ir a iniciar sesión →</a>
+            {{end}}
+          </div>
+        {{end}}
+
+        {{if and . .MensajeExito}}
+          <div class="alerta alerta--exito" role="status">
+            ✓ ¡Gracias, <strong>{{.MensajeExito}}</strong>! Tu cuenta ha sido creada correctamente.
+            <a href="/login" class="boton boton--primario boton--bloque">Iniciar sesión ahora</a>
+          </div>
+        {{else}}
+
+        <form action="/registro" method="POST" class="formulario" novalidate>
+
+          <div class="formulario__campo">
+            <label for="nombre" class="formulario__etiqueta">Nombre</label>
+            <input
+              class="formulario__input"
+              type="text"
+              id="nombre"
+              name="nombre"
+              value="{{if .}}{{.NombreValor}}{{end}}"
+              required
+              autocomplete="name"
+              placeholder="Tu nombre">
           </div>
 
-          <div class="formulario__grupo">
+          <div class="formulario__campo">
             <label for="email" class="formulario__etiqueta">Correo electrónico</label>
-            <input type="email" id="email" name="email" class="formulario__input" placeholder="ejemplo@correo.com" required>
+            <input
+              class="formulario__input"
+              type="email"
+              id="email"
+              name="email"
+              value="{{if .}}{{.EmailValor}}{{end}}"
+              required
+              autocomplete="email"
+              placeholder="tu@email.com">
           </div>
 
-          <div class="formulario__grupo">
+          <div class="formulario__campo">
             <label for="password" class="formulario__etiqueta">Contraseña</label>
-            <input type="password" id="password" name="password" class="formulario__input" placeholder="Mínimo 8 caracteres" required minlength="8">
+            <input
+              class="formulario__input"
+              type="password"
+              id="password"
+              name="password"
+              required
+              autocomplete="new-password"
+              placeholder="Mínimo 8 caracteres"
+              minlength="8">
           </div>
 
-          <div class="formulario__acciones">
-            <button type="submit" class="boton boton--primario">Registrarse</button>
-          </div>
+          <button type="submit" class="boton boton--primario boton--ancho">
+            Crear cuenta
+          </button>
 
         </form>
 
+        <p class="formulario__pie">
+          ¿Ya tienes cuenta?
+          <a href="/login" class="formulario__enlace">Iniciar sesión</a>
+        </p>
+
+        {{end}}
+
       </div>
     </section>
-  </main>
-
-  <footer class="pie">
-    <div class="pie__inner">
-      <ul class="pie__nav">
-        <li><a href="/" class="pie__enlace">Inicio</a></li>
-        <li><a href="/ranking" class="pie__enlace">Ranking</a></li>
-        <li><a href="/resenas" class="pie__enlace">Reseñas</a></li>
-        <li><a href="/registro" class="pie__enlace">Registro</a></li>
-      </ul>
-      <p class="pie__texto">
-        <small>© <time datetime="2026">2026</time> TastetheWorld. Todos los derechos reservados.</small>
-      </p>
-    </div>
-  </footer>
-
-</body>
-</html>
+{{end}}
