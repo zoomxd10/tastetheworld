@@ -1,9 +1,9 @@
 // Punto de entrada de la aplicación TastetheWorld.
 // Se encarga de:
-//   1. Inicializar el logger.
-//   2. Parsear y cachear todas las plantillas HTML al arranque.
-//   3. Inyectar las dependencias en la struct Aplicacion.
-//   4. Registrar las rutas y arrancar el servidor.
+//  1. Inicializar el logger.
+//  2. Parsear y cachear todas las plantillas HTML al arranque.
+//  3. Inyectar las dependencias en la struct Aplicacion.
+//  4. Registrar las rutas (páginas HTML + API REST) y arrancar el servidor.
 package main
 
 import (
@@ -46,13 +46,20 @@ func main() {
 	fileServer := http.FileServer(http.Dir("./ui/static/"))
 	mux.Handle("/static/", http.StripPrefix("/static", fileServer))
 
-	// Páginas de la aplicación
+	// Páginas HTML
 	mux.HandleFunc("/", app.Home)
 	mux.HandleFunc("/ranking", app.Ranking)
 	mux.HandleFunc("/resenas", app.Resenas)
 	mux.HandleFunc("/registro", app.Registro)
 	mux.HandleFunc("/login", app.Login)
 	mux.HandleFunc("/logout", app.Logout)
+	mux.HandleFunc("/admin/usuarios", app.Admin)
+
+	// API REST — CRUD de usuarios
+	// /api/v1/usuarios        → colección (GET lista, POST crea)
+	// /api/v1/usuarios/{email} → recurso individual (GET, PUT, DELETE)
+	mux.HandleFunc("/api/v1/usuarios", app.ApiUsuarios)
+	mux.HandleFunc("/api/v1/usuarios/", app.ApiUsuario)
 
 	// --- 6. ARRANQUE DEL SERVIDOR ---
 	addr := ":8000"

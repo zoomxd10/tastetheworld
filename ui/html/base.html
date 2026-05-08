@@ -31,7 +31,8 @@
           <li><a href="/resenas" class="nav__enlace {{block "nav-resenas" .}}{{end}}">Reseñas</a></li>
 
           {{if .UsuarioNombre}}
-            {{/* Usuario autenticado: icono con iniciales + botón de logout */}}
+            {{/* Usuario autenticado: enlace admin + icono + logout */}}
+            <li><a href="/admin/usuarios" class="nav__enlace {{block "nav-admin" .}}{{end}}">Admin</a></li>
             <li class="nav__usuario">
               <div class="usuario__icono" aria-label="Usuario: {{.UsuarioNombre}}" title="{{.UsuarioNombre}}">
                 {{.UsuarioIniciales}}

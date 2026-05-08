@@ -1,11 +1,14 @@
 // Package handlers contiene todos los controladores HTTP de la aplicación.
 // Implementa la capa de presentación/control del patrón MVC:
 //   - Model      → internal/models
-//   - View        → ui/html (plantillas Go)
+//   - View       → ui/html (plantillas Go)
 //   - Controller → internal/handlers (este paquete)
+//
+// Además expone la API REST bajo /api/v1/ para la PEC 3.
 package handlers
 
 import (
+	"encoding/json"
 	"html/template"
 	"log"
 	"net/http"
@@ -29,10 +32,9 @@ type Aplicacion struct {
 }
 
 // DatosBase contiene los campos que reciben TODAS las plantillas a través de base.html.
-// Permite mostrar el icono de usuario con sus iniciales cuando hay sesión activa.
 type DatosBase struct {
-	UsuarioNombre    string // nombre completo del usuario (vacío si no autenticado)
-	UsuarioIniciales string // ej: "AG" para "Ana García"
+	UsuarioNombre    string
+	UsuarioIniciales string
 }
 
 // sesionActual lee la cookie y devuelve los DatosBase con la sesión activa, si la hay.
@@ -75,7 +77,7 @@ func iniciales(nombre string) string {
 }
 
 // ============================================================
-// HANDLERS DE PÁGINAS
+// HANDLERS DE PÁGINAS HTML
 // ============================================================
 
 // Home sirve la página de inicio ("/").
@@ -107,6 +109,17 @@ func (app *Aplicacion) Resenas(w http.ResponseWriter, r *http.Request) {
 		Consulta:  consulta,
 		HayFiltro: consulta != "",
 	})
+}
+
+// Admin sirve la página de administración de usuarios ("/admin/usuarios").
+// Solo accesible si hay sesión activa; redirige a /login en caso contrario.
+func (app *Aplicacion) Admin(w http.ResponseWriter, r *http.Request) {
+	sesion := app.sesionActual(r)
+	if sesion.UsuarioNombre == "" {
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
+		return
+	}
+	app.renderizar(w, "admin.html", sesion)
 }
 
 // ============================================================
@@ -172,12 +185,11 @@ func (app *Aplicacion) procesarRegistro(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 	if existe {
-		// Indicar al usuario que puede iniciar sesión con ese correo.
 		app.renderizarRegistro(w, r, "Ese correo ya está registrado. ¿Quieres iniciar sesión?", datos)
 		return
 	}
 
-	// Hashear con bcrypt (coste 12) según Tema 3. Nunca texto plano.
+	// Hashear con bcrypt (coste 12). Nunca texto plano.
 	hash, err := bcrypt.GenerateFromPassword([]byte(password), 12)
 	if err != nil {
 		app.Log.Printf("handlers: hashear contraseña: %v", err)
@@ -206,8 +218,6 @@ func (app *Aplicacion) procesarRegistro(w http.ResponseWriter, r *http.Request) 
 // ============================================================
 
 // Login gestiona GET y POST de "/login".
-//   - GET  → muestra el formulario de inicio de sesión.
-//   - POST → verifica credenciales, crea sesión y redirige a inicio.
 func (app *Aplicacion) Login(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodGet:
@@ -257,7 +267,7 @@ func (app *Aplicacion) procesarLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Mensaje genérico: nunca revelar si el email existe o no (Tema 3).
+	// Mensaje genérico: no revelar si el email existe o no (prevención de enumeración).
 	if usuario == nil || bcrypt.CompareHashAndPassword([]byte(usuario.PasswordHash), []byte(password)) != nil {
 		app.renderizarLogin(w, r, "Credenciales incorrectas.", email)
 		return
@@ -271,7 +281,7 @@ func (app *Aplicacion) procesarLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Establecer la cookie de sesión (HttpOnly: no accesible desde JS).
+	// Cookie HttpOnly: no accesible desde JavaScript.
 	http.SetCookie(w, &http.Cookie{
 		Name:     nombreCookie,
 		Value:    token,
@@ -290,7 +300,7 @@ func (app *Aplicacion) procesarLogin(w http.ResponseWriter, r *http.Request) {
 // ============================================================
 
 // Logout elimina la sesión y la cookie, luego redirige a inicio.
-// Solo acepta POST para evitar logout accidental por GET (p.ej. prefetch).
+// Solo acepta POST para evitar logout accidental por GET (prefetch, etc.).
 func (app *Aplicacion) Logout(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		w.Header().Set("Allow", "POST")
@@ -313,6 +323,231 @@ func (app *Aplicacion) Logout(w http.ResponseWriter, r *http.Request) {
 	})
 
 	http.Redirect(w, r, "/", http.StatusSeeOther)
+}
+
+// ============================================================
+// API REST — /api/v1/usuarios
+// ============================================================
+
+// respuestaUsuario es la representación pública de un usuario en la API.
+// Nunca incluye el hash de la contraseña.
+type respuestaUsuario struct {
+	Nombre string `json:"nombre"`
+	Email  string `json:"email"`
+}
+
+// respuestaError es el formato estándar de error de la API.
+type respuestaError struct {
+	Mensaje string `json:"mensaje"`
+}
+
+// escribirJSON serializa v como JSON y lo envía con el código de estado dado.
+func escribirJSON(w http.ResponseWriter, codigo int, v interface{}) {
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(codigo)
+	if err := json.NewEncoder(w).Encode(v); err != nil {
+		// En este punto el status ya está enviado; solo registramos el error.
+		_ = err
+	}
+}
+
+// errorJSON envía un error JSON con el código y mensaje dados.
+func errorJSON(w http.ResponseWriter, codigo int, mensaje string) {
+	escribirJSON(w, codigo, respuestaError{Mensaje: mensaje})
+}
+
+// requireSesion comprueba que la petición tiene cookie de sesión válida.
+// Devuelve true si está autenticado; false (y escribe 401) si no.
+func (app *Aplicacion) requireSesion(w http.ResponseWriter, r *http.Request) bool {
+	cookie, err := r.Cookie(nombreCookie)
+	if err != nil {
+		errorJSON(w, http.StatusUnauthorized, "Se requiere autenticación.")
+		return false
+	}
+	if _, ok := app.SesionStore.Obtener(cookie.Value); !ok {
+		errorJSON(w, http.StatusUnauthorized, "Sesión expirada o inválida.")
+		return false
+	}
+	return true
+}
+
+// ApiUsuarios atiende GET /api/v1/usuarios y POST /api/v1/usuarios.
+//
+//	GET  → lista todos los usuarios (sin contraseña). 200 OK.
+//	POST → crea un nuevo usuario. 201 Created / 400 / 409.
+func (app *Aplicacion) ApiUsuarios(w http.ResponseWriter, r *http.Request) {
+	switch r.Method {
+	case http.MethodGet:
+		app.apiListarUsuarios(w, r)
+	case http.MethodPost:
+		app.apiCrearUsuario(w, r)
+	default:
+		w.Header().Set("Allow", "GET, POST")
+		errorJSON(w, http.StatusMethodNotAllowed, "Método no permitido.")
+	}
+}
+
+// ApiUsuario atiende GET /api/v1/usuarios/{email}, PUT y DELETE.
+//
+//	GET    → busca un usuario por email. 200 / 404.
+//	PUT    → actualiza el nombre. Requiere sesión. 200 / 400 / 401 / 404.
+//	DELETE → elimina el usuario. Requiere sesión. 204 / 401 / 404.
+func (app *Aplicacion) ApiUsuario(w http.ResponseWriter, r *http.Request) {
+	// Extraer el email de la URL: /api/v1/usuarios/{email}
+	email := strings.TrimPrefix(r.URL.Path, "/api/v1/usuarios/")
+	if email == "" {
+		errorJSON(w, http.StatusBadRequest, "Email no especificado en la URL.")
+		return
+	}
+
+	switch r.Method {
+	case http.MethodGet:
+		app.apiBuscarUsuario(w, r, email)
+	case http.MethodPut:
+		if !app.requireSesion(w, r) {
+			return
+		}
+		app.apiActualizarUsuario(w, r, email)
+	case http.MethodDelete:
+		if !app.requireSesion(w, r) {
+			return
+		}
+		app.apiEliminarUsuario(w, r, email)
+	default:
+		w.Header().Set("Allow", "GET, PUT, DELETE")
+		errorJSON(w, http.StatusMethodNotAllowed, "Método no permitido.")
+	}
+}
+
+// apiListarUsuarios devuelve el array completo de usuarios sin password_hash.
+func (app *Aplicacion) apiListarUsuarios(w http.ResponseWriter, r *http.Request) {
+	usuarios, err := app.UsuarioStore.LeerTodos()
+	if err != nil {
+		app.Log.Printf("api: listar usuarios: %v", err)
+		errorJSON(w, http.StatusInternalServerError, "Error interno del servidor.")
+		return
+	}
+	// Convertir a respuestaUsuario para no exponer el hash.
+	respuesta := make([]respuestaUsuario, len(usuarios))
+	for i, u := range usuarios {
+		respuesta[i] = respuestaUsuario{Nombre: u.Nombre, Email: u.Email}
+	}
+	escribirJSON(w, http.StatusOK, respuesta)
+}
+
+// apiBuscarUsuario devuelve un único usuario por email.
+func (app *Aplicacion) apiBuscarUsuario(w http.ResponseWriter, r *http.Request, email string) {
+	usuario, err := app.UsuarioStore.BuscarPorEmail(email)
+	if err != nil {
+		app.Log.Printf("api: buscar usuario: %v", err)
+		errorJSON(w, http.StatusInternalServerError, "Error interno del servidor.")
+		return
+	}
+	if usuario == nil {
+		errorJSON(w, http.StatusNotFound, "Usuario no encontrado.")
+		return
+	}
+	escribirJSON(w, http.StatusOK, respuestaUsuario{Nombre: usuario.Nombre, Email: usuario.Email})
+}
+
+// apiCrearUsuario procesa el body JSON y crea un nuevo usuario.
+func (app *Aplicacion) apiCrearUsuario(w http.ResponseWriter, r *http.Request) {
+	var body struct {
+		Nombre   string `json:"nombre"`
+		Email    string `json:"email"`
+		Password string `json:"password"`
+	}
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		errorJSON(w, http.StatusBadRequest, "JSON inválido.")
+		return
+	}
+
+	body.Nombre = strings.TrimSpace(body.Nombre)
+	body.Email = strings.TrimSpace(body.Email)
+
+	if body.Nombre == "" || body.Email == "" || body.Password == "" {
+		errorJSON(w, http.StatusBadRequest, "Los campos nombre, email y password son obligatorios.")
+		return
+	}
+	if len(body.Password) < 8 {
+		errorJSON(w, http.StatusBadRequest, "La contraseña debe tener al menos 8 caracteres.")
+		return
+	}
+
+	existe, err := app.UsuarioStore.ExisteEmail(body.Email)
+	if err != nil {
+		app.Log.Printf("api: comprobar email: %v", err)
+		errorJSON(w, http.StatusInternalServerError, "Error interno del servidor.")
+		return
+	}
+	if existe {
+		errorJSON(w, http.StatusConflict, "Ese correo electrónico ya está registrado.")
+		return
+	}
+
+	hash, err := bcrypt.GenerateFromPassword([]byte(body.Password), 12)
+	if err != nil {
+		app.Log.Printf("api: hashear contraseña: %v", err)
+		errorJSON(w, http.StatusInternalServerError, "Error interno del servidor.")
+		return
+	}
+
+	if err := app.UsuarioStore.Guardar(models.Usuario{
+		Nombre:       body.Nombre,
+		Email:        body.Email,
+		PasswordHash: string(hash),
+	}); err != nil {
+		app.Log.Printf("api: guardar usuario: %v", err)
+		errorJSON(w, http.StatusInternalServerError, "Error interno del servidor.")
+		return
+	}
+
+	escribirJSON(w, http.StatusCreated, respuestaUsuario{Nombre: body.Nombre, Email: body.Email})
+}
+
+// apiActualizarUsuario actualiza el nombre del usuario indicado en la URL.
+func (app *Aplicacion) apiActualizarUsuario(w http.ResponseWriter, r *http.Request, email string) {
+	var body struct {
+		Nombre string `json:"nombre"`
+	}
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		errorJSON(w, http.StatusBadRequest, "JSON inválido.")
+		return
+	}
+	body.Nombre = strings.TrimSpace(body.Nombre)
+	if body.Nombre == "" {
+		errorJSON(w, http.StatusBadRequest, "El campo nombre es obligatorio.")
+		return
+	}
+
+	actualizado, err := app.UsuarioStore.Actualizar(email, body.Nombre)
+	if err != nil {
+		app.Log.Printf("api: actualizar usuario: %v", err)
+		errorJSON(w, http.StatusInternalServerError, "Error interno del servidor.")
+		return
+	}
+	if !actualizado {
+		errorJSON(w, http.StatusNotFound, "Usuario no encontrado.")
+		return
+	}
+
+	escribirJSON(w, http.StatusOK, respuestaUsuario{Nombre: body.Nombre, Email: email})
+}
+
+// apiEliminarUsuario borra el usuario indicado en la URL.
+func (app *Aplicacion) apiEliminarUsuario(w http.ResponseWriter, r *http.Request, email string) {
+	eliminado, err := app.UsuarioStore.Eliminar(email)
+	if err != nil {
+		app.Log.Printf("api: eliminar usuario: %v", err)
+		errorJSON(w, http.StatusInternalServerError, "Error interno del servidor.")
+		return
+	}
+	if !eliminado {
+		errorJSON(w, http.StatusNotFound, "Usuario no encontrado.")
+		return
+	}
+	// 204 No Content: éxito sin cuerpo de respuesta.
+	w.WriteHeader(http.StatusNoContent)
 }
 
 // ============================================================

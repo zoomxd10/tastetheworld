@@ -1,0 +1,280 @@
+{{/* admin.html — Panel de administración de usuarios.
+     Recibe DatosBase{UsuarioNombre, UsuarioIniciales}.
+     Requiere sesión activa: el handler Go redirige a /login si no la hay.
+     El CRUD completo se gestiona desde JavaScript puro con fetch() y <template>. */}}
+{{template "base" .}}
+
+{{define "titulo"}}Administración — TastetheWorld{{end}}
+{{define "descripcion"}}Panel de gestión de usuarios registrados en TastetheWorld.{{end}}
+{{define "nav-admin"}}nav__enlace--activo{{end}}
+
+{{define "contenido"}}
+<section class="admin">
+  <div class="admin__inner">
+
+    <h1 class="admin__titulo">Gestión de usuarios</h1>
+    <p class="admin__subtitulo">
+      Desde aquí puedes consultar, editar el nombre y eliminar usuarios registrados.
+    </p>
+
+    {{/* Zona de estado: cargando / error global */}}
+    <div id="admin-estado" class="alerta" aria-live="polite" hidden></div>
+
+    {{/* Tabla de usuarios — se rellena dinámicamente con JavaScript */}}
+    <div class="admin__tabla-contenedor">
+      <table class="admin__tabla" id="tabla-usuarios">
+        <thead>
+          <tr>
+            <th class="admin__th">Nombre</th>
+            <th class="admin__th">Email</th>
+            <th class="admin__th admin__th--acciones">Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="cuerpo-tabla">
+          {{/* Las filas se insertan aquí desde JavaScript */}}
+        </tbody>
+      </table>
+    </div>
+
+    {{/* <template>: define la estructura de cada fila sin renderizarla.
+         JavaScript clona este template por cada usuario devuelto por la API. */}}
+    <template id="fila-usuario">
+      <tr class="admin__fila">
+        {{/* Vista normal: muestra nombre y email */}}
+        <td class="admin__td admin__td--nombre">
+          <span class="admin__nombre-texto"></span>
+          <input class="admin__nombre-input formulario__input" type="text"
+                 aria-label="Nuevo nombre" placeholder="Nuevo nombre" hidden>
+        </td>
+        <td class="admin__td admin__td--email"></td>
+        <td class="admin__td admin__td--acciones">
+          {{/* Botón editar: alterna entre modo vista y modo edición */}}
+          <button class="boton boton--editar admin__btn-editar" type="button"
+                  aria-label="Editar nombre">
+            Editar
+          </button>
+          {{/* Botón guardar: visible solo en modo edición */}}
+          <button class="boton boton--primario admin__btn-guardar" type="button"
+                  aria-label="Guardar cambios" hidden>
+            Guardar
+          </button>
+          {{/* Botón cancelar: visible solo en modo edición */}}
+          <button class="boton boton--contorno admin__btn-cancelar" type="button"
+                  aria-label="Cancelar edición" hidden>
+            Cancelar
+          </button>
+          {{/* Botón eliminar */}}
+          <button class="boton boton--eliminar admin__btn-eliminar" type="button"
+                  aria-label="Eliminar usuario">
+            Eliminar
+          </button>
+        </td>
+      </tr>
+    </template>
+
+  </div>
+</section>
+{{end}}
+
+{{define "scripts"}}
+<script>
+// admin.js — Gestión CRUD de usuarios con fetch() y <template>.
+// JavaScript puro: sin bibliotecas externas.
+// Manipulación visual mediante clases CSS, nunca atributos style.
+(function () {
+  'use strict';
+
+  var API_BASE = '/api/v1/usuarios';
+  var cuerpoTabla = document.getElementById('cuerpo-tabla');
+  var templateFila = document.getElementById('fila-usuario');
+  var zonEstado = document.getElementById('admin-estado');
+
+  // ── Utilidades de estado ──────────────────────────────────────────────────
+
+  // mostrarEstado muestra un mensaje global de carga o error en la zona de estado.
+  function mostrarEstado(mensaje, tipo) {
+    zonEstado.textContent = mensaje;
+    zonEstado.className = 'alerta ' + (tipo === 'error' ? 'alerta--error' : 'alerta--info');
+    zonEstado.hidden = false;
+  }
+
+  function ocultarEstado() {
+    zonEstado.hidden = true;
+    zonEstado.textContent = '';
+    zonEstado.className = 'alerta';
+  }
+
+  // ── Renderizado ───────────────────────────────────────────────────────────
+
+  // crearFila clona el <template> y rellena los datos del usuario.
+  function crearFila(usuario) {
+    var clon = templateFila.content.cloneNode(true);
+    var fila  = clon.querySelector('tr');
+
+    var spanNombre  = fila.querySelector('.admin__nombre-texto');
+    var inputNombre = fila.querySelector('.admin__nombre-input');
+    var tdEmail     = fila.querySelector('.admin__td--email');
+    var btnEditar   = fila.querySelector('.admin__btn-editar');
+    var btnGuardar  = fila.querySelector('.admin__btn-guardar');
+    var btnCancelar = fila.querySelector('.admin__btn-cancelar');
+    var btnEliminar = fila.querySelector('.admin__btn-eliminar');
+
+    // Rellenar datos
+    spanNombre.textContent  = usuario.nombre;
+    inputNombre.value       = usuario.nombre;
+    tdEmail.textContent     = usuario.email;
+    fila.dataset.email      = usuario.email;
+
+    // ── Editar: activar modo edición ──────────────────────────────────────
+    btnEditar.addEventListener('click', function () {
+      activarEdicion(fila, spanNombre, inputNombre, btnEditar, btnGuardar, btnCancelar);
+    });
+
+    // ── Cancelar: volver a modo vista ─────────────────────────────────────
+    btnCancelar.addEventListener('click', function () {
+      desactivarEdicion(fila, spanNombre, inputNombre, btnEditar, btnGuardar, btnCancelar);
+    });
+
+    // ── Guardar: PUT /api/v1/usuarios/{email} ─────────────────────────────
+    btnGuardar.addEventListener('click', function () {
+      var nuevoNombre = inputNombre.value.trim();
+      if (!nuevoNombre) {
+        inputNombre.classList.add('formulario__input--error');
+        return;
+      }
+      inputNombre.classList.remove('formulario__input--error');
+
+      // Indicar carga aplicando clase CSS
+      fila.classList.add('admin__fila--cargando');
+      btnGuardar.disabled = true;
+
+      fetch(API_BASE + '/' + encodeURIComponent(usuario.email), {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nombre: nuevoNombre })
+      })
+      .then(function (res) {
+        if (!res.ok) {
+          return res.json().then(function (err) { throw new Error(err.mensaje || 'Error al guardar.'); });
+        }
+        return res.json();
+      })
+      .then(function (actualizado) {
+        // Actualizar la vista con el nuevo nombre
+        usuario.nombre = actualizado.nombre;
+        spanNombre.textContent = actualizado.nombre;
+        inputNombre.value = actualizado.nombre;
+        desactivarEdicion(fila, spanNombre, inputNombre, btnEditar, btnGuardar, btnCancelar);
+        // Resaltar la fila brevemente para confirmar el cambio
+        fila.classList.add('admin__fila--exito');
+        setTimeout(function () { fila.classList.remove('admin__fila--exito'); }, 1500);
+      })
+      .catch(function (err) {
+        mostrarErrorFila(fila, err.message);
+      })
+      .finally(function () {
+        fila.classList.remove('admin__fila--cargando');
+        btnGuardar.disabled = false;
+      });
+    });
+
+    // ── Eliminar: DELETE /api/v1/usuarios/{email} ─────────────────────────
+    btnEliminar.addEventListener('click', function () {
+      if (!confirm('¿Eliminar al usuario ' + usuario.nombre + ' (' + usuario.email + ')?')) {
+        return;
+      }
+
+      fila.classList.add('admin__fila--cargando');
+      btnEliminar.disabled = true;
+
+      fetch(API_BASE + '/' + encodeURIComponent(usuario.email), {
+        method: 'DELETE'
+      })
+      .then(function (res) {
+        if (res.status === 204) {
+          // Eliminar la fila del DOM con una transición CSS
+          fila.classList.add('admin__fila--eliminando');
+          setTimeout(function () { fila.remove(); }, 300);
+        } else {
+          return res.json().then(function (err) { throw new Error(err.mensaje || 'Error al eliminar.'); });
+        }
+      })
+      .catch(function (err) {
+        fila.classList.remove('admin__fila--cargando');
+        btnEliminar.disabled = false;
+        mostrarErrorFila(fila, err.message);
+      });
+    });
+
+    return fila;
+  }
+
+  // ── Helpers de modo edición ───────────────────────────────────────────────
+
+  function activarEdicion(fila, span, input, btnE, btnG, btnC) {
+    span.hidden  = true;
+    input.hidden = false;
+    btnE.hidden  = true;
+    btnG.hidden  = false;
+    btnC.hidden  = false;
+    fila.classList.add('admin__fila--editando');
+    input.focus();
+    input.select();
+  }
+
+  function desactivarEdicion(fila, span, input, btnE, btnG, btnC) {
+    span.hidden  = false;
+    input.hidden = true;
+    btnE.hidden  = false;
+    btnG.hidden  = true;
+    btnC.hidden  = true;
+    fila.classList.remove('admin__fila--editando');
+    limpiarErrorFila(fila);
+  }
+
+  function mostrarErrorFila(fila, mensaje) {
+    var tdNombre = fila.querySelector('.admin__td--nombre');
+    var existente = tdNombre.querySelector('.admin__error-fila');
+    if (!existente) {
+      var span = document.createElement('span');
+      span.className = 'admin__error-fila';
+      tdNombre.appendChild(span);
+      existente = span;
+    }
+    existente.textContent = mensaje;
+    fila.classList.add('admin__fila--error');
+  }
+
+  function limpiarErrorFila(fila) {
+    fila.classList.remove('admin__fila--error');
+    var err = fila.querySelector('.admin__error-fila');
+    if (err) { err.remove(); }
+  }
+
+  // ── Carga inicial: GET /api/v1/usuarios ───────────────────────────────────
+
+  mostrarEstado('Cargando usuarios…', 'info');
+
+  fetch(API_BASE)
+    .then(function (res) {
+      if (!res.ok) { throw new Error('No se pudo cargar la lista de usuarios.'); }
+      return res.json();
+    })
+    .then(function (usuarios) {
+      ocultarEstado();
+      if (usuarios.length === 0) {
+        mostrarEstado('No hay usuarios registrados todavía.', 'info');
+        return;
+      }
+      // Renderizar cada usuario clonando el <template>
+      usuarios.forEach(function (u) {
+        cuerpoTabla.appendChild(crearFila(u));
+      });
+    })
+    .catch(function (err) {
+      mostrarEstado(err.message, 'error');
+    });
+
+}());
+</script>
+{{end}}

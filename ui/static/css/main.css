@@ -701,3 +701,163 @@ a:hover {
   text-decoration: underline;
   color: inherit;
 }
+
+/* =====================================================
+   PÁGINA DE ADMINISTRACIÓN DE USUARIOS (PEC 3)
+   ===================================================== */
+
+.admin {
+  padding: 2rem 1rem;
+}
+
+.admin__inner {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.admin__titulo {
+  margin-bottom: 0.5rem;
+}
+
+.admin__subtitulo {
+  color: #555;
+  margin-bottom: 1.5rem;
+}
+
+/* Mensaje de estado global (carga / error) */
+.alerta--info {
+  background-color: #e8f4fd;
+  border-left: 4px solid #2e86c1;
+  color: #1a5276;
+  padding: 0.75rem 1rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+}
+
+/* Tabla */
+.admin__tabla-contenedor {
+  overflow-x: auto;
+}
+
+.admin__tabla {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.admin__th {
+  background-color: #1a3a5c;
+  color: #fff;
+  padding: 0.75rem 1rem;
+  text-align: left;
+  font-size: 0.9rem;
+  letter-spacing: 0.03em;
+}
+
+.admin__th--acciones {
+  text-align: right;
+}
+
+.admin__td {
+  padding: 0.7rem 1rem;
+  border-bottom: 1px solid #eee;
+  vertical-align: middle;
+}
+
+.admin__td--acciones {
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* Estados de fila */
+.admin__fila:hover {
+  background-color: #f8fbff;
+}
+
+.admin__fila--editando {
+  background-color: #fffbea;
+}
+
+.admin__fila--cargando {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* Transición de eliminación */
+.admin__fila--eliminando {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  opacity: 0;
+  transform: translateX(20px);
+}
+
+/* Resaltado de éxito al guardar */
+.admin__fila--exito {
+  background-color: #eafaf1;
+  transition: background-color 0.5s ease;
+}
+
+.admin__fila--error .admin__td--nombre {
+  color: #c0392b;
+}
+
+/* Error inline dentro de la fila */
+.admin__error-fila {
+  display: block;
+  font-size: 0.8rem;
+  color: #c0392b;
+  margin-top: 0.25rem;
+}
+
+/* Input de edición dentro de la tabla */
+.admin__nombre-input {
+  width: 100%;
+  max-width: 260px;
+  padding: 0.35rem 0.6rem;
+  font-size: 0.95rem;
+}
+
+.admin__nombre-input.formulario__input--error {
+  border-color: #e74c3c;
+  box-shadow: 0 0 0 2px rgba(231, 76, 60, 0.2);
+}
+
+/* Botones de acción en la tabla */
+.boton--editar {
+  background-color: #2e86c1;
+  color: #fff;
+  border: none;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.85rem;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-left: 0.25rem;
+}
+
+.boton--editar:hover {
+  background-color: #1a5276;
+}
+
+.boton--eliminar {
+  background-color: #e74c3c;
+  color: #fff;
+  border: none;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.85rem;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-left: 0.25rem;
+}
+
+.boton--eliminar:hover {
+  background-color: #c0392b;
+}
+
+.admin__btn-guardar,
+.admin__btn-cancelar {
+  padding: 0.35rem 0.75rem;
+  font-size: 0.85rem;
+  margin-left: 0.25rem;
+}
